@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Snake {
 
@@ -16,6 +18,9 @@ namespace Snake {
 
     static class Settings {
         public static readonly int SPEED = 100;
+        public static readonly int MAXTOPGAMES = 3;
+
+        public static readonly string topScoresFile = "./top3games.xml";
     }
 
     static class Tools {
@@ -40,19 +45,50 @@ namespace Snake {
             }
         }
 
-        public static void WriteToFile (List<Vector2> snake) {
+        public static void WriteToFile (List<object> objs) {
             using (StreamWriter sw = new StreamWriter (@"./Debugging/output.txt", true)) {
                 sw.WriteLine (DateTime.Now);
-                snake.ForEach (part => {
-                    sw.Write (part.ToString ());
+                objs.ForEach (obj => {
+                    sw.Write (obj.ToString ());
                 });
                 sw.WriteLine ();
             }
         }
 
-        public static void saveTop3Games (List<object> games) {
-            XmlDocument xml = new XmlDocument ();
+        public static void saveTop3Games (List<ScoreTime> games) {
+            games = ScoreTime.Sort (games);
+            if (games.Count > 3) {
+                games.RemoveAt (3);
+            }
 
+            SerializeNow (games);
+        }
+
+        public static List<ScoreTime> getTopGames () {
+            try {
+                return ScoreTime.Sort (DeSerializeNow ());
+            } catch (FileNotFoundException) {
+                return new List<ScoreTime> ();
+            }
+        }
+
+        private static void SerializeNow (List<ScoreTime> games) {
+            XmlSerializer xs = new XmlSerializer (typeof (List<ScoreTime>));
+            using (StreamWriter sw = new StreamWriter (Settings.topScoresFile)) {
+                using (XmlWriter writer = XmlWriter.Create (sw)) {
+                    xs.Serialize (writer, games);
+                }
+            }
+        }
+
+        private static List<ScoreTime> DeSerializeNow () {
+            XmlSerializer xs = new XmlSerializer (typeof (List<ScoreTime>));
+            using (StreamReader sr = new StreamReader (Settings.topScoresFile)) {
+                sr.BaseStream.Position = 0;
+                using (XmlReader reader = XmlReader.Create (sr)) {
+                    return (List<ScoreTime>) xs.Deserialize (reader);
+                }
+            }
         }
 
     }
