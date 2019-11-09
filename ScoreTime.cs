@@ -19,7 +19,7 @@ namespace Snake {
         }
 
         public bool OnLeaderBoard (List<ScoreTime> leaderboard) {
-            if (leaderboard.Count <= Settings.MAXTOPGAMES) {
+            if (leaderboard.Count < Settings.MAXTOPGAMES) {
                 return true;
             }
             foreach (var st in leaderboard) {
