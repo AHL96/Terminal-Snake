@@ -20,7 +20,7 @@ namespace Snake {
     static class Settings {
         public static readonly int SPEED = 100;
         public static readonly int MAXTOPGAMES = 3;
-        public static readonly string topScoresFile = Path.Combine (Assembly.GetEntryAssembly ().Location, "../top3games.xml");
+        public static readonly string topScoresFile = Path.Combine (Assembly.GetEntryAssembly ().Location, "../.top3games.xml");
     }
 
     static class Tools {
