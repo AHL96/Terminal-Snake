@@ -50,10 +50,8 @@ namespace Snake {
             }
         }
 
-        public void events () {
-            if (Console.KeyAvailable) {
-                dir = Tools.dirMap[Console.ReadKey ().Key];
-            }
+        public void events (ConsoleKey key) {
+            dir = Tools.dirMap[key];
         }
 
         public void update () {
