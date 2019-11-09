@@ -11,14 +11,10 @@ namespace Snake {
             pos = Tools.RandomLocation ();
         }
 
-        public void update () {
-
-        }
-
         public void draw (Game game) {
             int x = (int) pos.X;
             int y = (int) pos.Y;
-            game.board[y, x] = Constansts.APPLE;
+            game.board[y, x] = UI.APPLE;
         }
     }
 }
