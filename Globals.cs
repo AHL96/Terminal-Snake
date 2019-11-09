@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
-
 namespace Snake {
 
     static class UI {
+        public static readonly int WIDTH = 50;
+        public static readonly int HEIGHT = 25;
         public static readonly char BOARDPIECE = ' ';
         public static readonly char SNAKEPIECE = '#';
         public static readonly char APPLE = '@';
@@ -19,8 +20,7 @@ namespace Snake {
     static class Settings {
         public static readonly int SPEED = 100;
         public static readonly int MAXTOPGAMES = 3;
-
-        public static readonly string topScoresFile = "./top3games.xml";
+        public static readonly string topScoresFile = Path.Combine (Assembly.GetEntryAssembly ().Location, "../top3games.xml");
     }
 
     static class Tools {
