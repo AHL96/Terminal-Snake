@@ -51,7 +51,11 @@ namespace Snake {
         }
 
         public void events (ConsoleKey key) {
-            dir = Tools.dirMap[key];
+            try {
+                dir = Tools.dirMap[key];
+            } catch {
+                // key wasn't in mapping
+            }
         }
 
         public void update () {

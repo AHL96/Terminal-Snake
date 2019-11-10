@@ -10,7 +10,6 @@ namespace Snake {
         public TimeSpan duration { get; set; }
 
         public static List<ScoreTime> Sort (List<ScoreTime> games) {
-            // scores.GroupBy (s => s.score).OrderByDescending (group => group.OrderBy (s => s.duration));
             return games.OrderByDescending (s => s.score).ThenBy (s => s.duration).ToList ();
         }
 
@@ -32,7 +31,7 @@ namespace Snake {
 
         public bool Better (ScoreTime other) {
             if (score == other.score) {
-                return duration > other.duration;
+                return duration < other.duration;
             }
             return score > other.score;
         }
