@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Snake {
@@ -24,15 +25,12 @@ namespace Snake {
             lives = 1;
         }
 
-        public void eat (List<Apple> apples) {
-            List<Apple> tempApples = new List<Apple> (apples);
-            tempApples.ForEach (apple => {
-                if (apple.pos == head) {
-                    body.Add (apple.pos);
-                    apples.Remove (apple);
-                    apples.Add (new Apple ());
-                }
-            });
+        public void eat (Apple apple) {
+            body.Add (apple.pos);
+        }
+
+        public List<Item> eat (List<Item> items) {
+            return items.Where (item => !item.eattenBy (this)).ToList ();
         }
 
         public void move () {

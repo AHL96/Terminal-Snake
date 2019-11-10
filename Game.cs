@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -11,7 +12,7 @@ namespace Snake {
         public static readonly int WIDTH = UI.WIDTH;
         public readonly char[, ] board = new char[HEIGHT, WIDTH];
         public readonly Snake snake = new Snake ();
-        List<Apple> apples = new List<Apple> (3);
+        List<Item> items = new List<Item> ();
         private readonly DateTime start = DateTime.Now;
         private TimeSpan time;
         private List<ScoreTime> topGames;
@@ -27,11 +28,13 @@ namespace Snake {
                 }
             }
 
-            for (int i = 0; i < apples.Capacity; i++) {
-                apples.Add (new Apple ());
+            for (int i = 0; i < Settings.MAXAPPLES; i++) {
+                items.Add (new Apple ());
             }
 
             topGames = new List<ScoreTime> (Tools.getTopGames ());
+
+            items.Add (new Life ());
         }
 
         public void run () {
@@ -133,6 +136,13 @@ namespace Snake {
                             goto default;
                         }
                         break;
+                    case 20:
+                        if (paused) {
+                            display.Append ("|\tPAUSED\n");
+                        } else {
+                            goto default;
+                        }
+                        break;
                     default:
                         display.Append ("|\n");
                         break;
@@ -150,7 +160,7 @@ namespace Snake {
         public void display () {
             clearBoard ();
             snake.draw (this);
-            apples.ForEach (apple => apple.draw (this));
+            items.ForEach (apple => apple.draw (this));
             drawBoard ();
         }
 
@@ -158,7 +168,31 @@ namespace Snake {
             if (!paused) {
                 time = DateTime.Now - start;
                 snake.update ();
-                snake.eat (apples);
+                items.ForEach (item => item.update ());
+                items = snake.eat (items);
+                items = items.Where (item => !item.timedOut ()).ToList ();
+                if (items.Count < Settings.MAXITEMS) {
+                    addItem ();
+                }
+            }
+        }
+
+        public void addItem () {
+            double n = Tools.RandomDouble ();
+            int appleCount = 0;
+            items.ForEach (item => {
+                try {
+                    item = (Apple) item;
+                    appleCount++;
+                } catch {
+                    // not an apple
+                }
+            });
+
+            if (n < 0.01) {
+                items.Add (new Life ());
+            } else if (appleCount < Settings.MAXAPPLES) {
+                items.Add (new Apple ());
             }
         }
 

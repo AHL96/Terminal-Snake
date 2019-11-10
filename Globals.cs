@@ -20,6 +20,8 @@ namespace Snake {
     static class Settings {
         public static readonly int SPEED = 100;
         public static readonly int MAXTOPGAMES = 3;
+        public static readonly int MAXAPPLES = 3;
+        public static readonly int MAXITEMS = MAXAPPLES + 1;
         public static readonly string topScoresFile = Path.Combine (Assembly.GetEntryAssembly ().Location, "../.top3games.xml");
     }
 
@@ -31,12 +33,17 @@ namespace Snake {
             new KeyValuePair<ConsoleKey, Vector2> (ConsoleKey.DownArrow, new Vector2 (0, 1)),
             new KeyValuePair<ConsoleKey, Vector2> (ConsoleKey.LeftArrow, new Vector2 (-1, 0)),
         });
-        private static readonly Random rnd = new Random ();
         public static Vector2 RandomLocation () {
+            Random rnd = new Random ();
             return new Vector2 {
                 X = rnd.Next () % Game.WIDTH,
                     Y = rnd.Next () % Game.HEIGHT
             };
+        }
+
+        public static double RandomDouble () {
+            Random rnd = new Random ();
+            return rnd.NextDouble ();
         }
 
         public static void WriteToFile (string txt) {
