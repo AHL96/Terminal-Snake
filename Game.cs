@@ -74,17 +74,16 @@ namespace Snake {
             Console.Clear ();
         }
 
-        public void display () {
+        public void drawBoard () {
             int place = 0;
-            clearBoard ();
-            snake.draw (this);
-            apples.ForEach (apple => apple.draw (this));
 
             StringBuilder display = new StringBuilder ();
+
             for (int i = 0; i <= WIDTH + 1; i++) {
                 display.Append ('=');
             }
             display.Append ('\n');
+
             for (int i = 0; i < HEIGHT; i++) {
                 display.Append ('|');
                 for (int j = 0; j < WIDTH; j++) {
@@ -104,7 +103,7 @@ namespace Snake {
                         display.Append ($"|  Your time: {time.Seconds}.{time.Milliseconds}\n");
                         break;
                     case 5:
-                        display.Append ($"|  BEST GAMES\n");
+                        display.Append ($"|  LEADERBOARD\n");
                         break;
                     case 6:
                     case 10:
@@ -140,11 +139,19 @@ namespace Snake {
                 }
 
             }
+
             for (int i = 0; i <= WIDTH + 1; i++) {
                 display.Append ('=');
             }
 
             Console.WriteLine (display);
+        }
+
+        public void display () {
+            clearBoard ();
+            snake.draw (this);
+            apples.ForEach (apple => apple.draw (this));
+            drawBoard ();
         }
 
         public void update () {
