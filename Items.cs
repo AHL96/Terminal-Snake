@@ -7,8 +7,8 @@ namespace Snake {
         public Vector2 pos { get; set; }
         protected abstract char img { get; }
 
-        public Item () {
-            pos = Tools.RandomLocation ();
+        public Item (Game game) {
+            pos = Tools.RandomItemLocation (game);
         }
 
         public void draw (Game game) {
@@ -28,7 +28,7 @@ namespace Snake {
                 return UI.APPLE;
             }
         }
-        public Apple () : base () { }
+        public Apple (Game game) : base (game) { }
         public override void update () { }
         public override bool timedOut () { return false; }
 
@@ -50,6 +50,8 @@ namespace Snake {
             }
         }
         private int currImg = 0;
+
+        public Life (Game game) : base (game) { }
 
         public override void update () {
             currImg = (currImg + 1) % imgs.Length;

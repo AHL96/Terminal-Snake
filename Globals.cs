@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
+
 namespace Snake {
 
     static class UI {
@@ -33,17 +34,23 @@ namespace Snake {
             new KeyValuePair<ConsoleKey, Vector2> (ConsoleKey.DownArrow, new Vector2 (0, 1)),
             new KeyValuePair<ConsoleKey, Vector2> (ConsoleKey.LeftArrow, new Vector2 (-1, 0)),
         });
-        public static Vector2 RandomLocation () {
-            Random rnd = new Random ();
-            return new Vector2 {
-                X = rnd.Next () % Game.WIDTH,
-                    Y = rnd.Next () % Game.HEIGHT
-            };
-        }
 
         public static double RandomDouble () {
             Random rnd = new Random ();
             return rnd.NextDouble ();
+        }
+
+        public static Vector2 RandomItemLocation (Game game) {
+            Random rnd = new Random ();
+            Vector2 vect;
+            do {
+                vect = new Vector2 {
+                    X = rnd.Next () % Game.WIDTH,
+                    Y = rnd.Next () % Game.HEIGHT
+                };
+            } while (game.board[(int) vect.Y, (int) vect.X] != UI.BOARDPIECE);
+
+            return vect;
         }
 
         public static void WriteToFile (string txt) {

@@ -29,12 +29,11 @@ namespace Snake {
             }
 
             for (int i = 0; i < Settings.MAXAPPLES; i++) {
-                items.Add (new Apple ());
+                items.Add (new Apple (this));
             }
 
             topGames = new List<ScoreTime> (Tools.getTopGames ());
 
-            items.Add (new Life ());
         }
 
         public void run () {
@@ -190,9 +189,9 @@ namespace Snake {
             });
 
             if (n < 0.01) {
-                items.Add (new Life ());
+                items.Add (new Life (this));
             } else if (appleCount < Settings.MAXAPPLES) {
-                items.Add (new Apple ());
+                items.Add (new Apple (this));
             }
         }
 
